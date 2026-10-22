@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica 2 - Dibujar Figuras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 80px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 5px;
+            font-size: 14px;
+        }
+        button {
+            padding: 6px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* Contenedor del dibujo con fuente monoespaciada para mantener la estructura */
+        #resultado {
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 18px;
+            white-space: pre;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Práctica 2</h2>
+    <p>Crea una aplicación que dibuje triángulos o rectángulos.</p>
+
+    <div style="border: 1px solid #ccc; padding: 20px; max-width: 400px;">
+        <div class="form-group">
+            <label for="figura">Figura:</label>
+            <select id="figura" onchange="actualizarCampos()">
+                <option value="triangulo">Triángulo</option>
+                <option value="rectangulo">Rectángulo</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="caracter">Carácter:</label>
+            <input type="text" id="caracter" value="*" maxlength="1" style="width: 50px;">
+        </div>
+
+        <!-- Campo dinámico para la Base (oculto por defecto para el triángulo) -->
+        <div class="form-group" id="grupo-base" style="display: none;">
+            <label for="base">Base:</label>
+            <input type="number" id="base" value="5" min="1" style="width: 60px;">
+        </div>
+
+        <div class="form-group">
+            <label for="altura">Altura:</label>
+            <input type="number" id="altura" value="3" min="1" style="width: 60px;">
+        </div>
+
+        <button onclick="dibujar()">Mostrar</button>
+
+        <!-- Aquí se mostrará la figura -->
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function actualizarCampos() {
+            const figura = document.getElementById('figura').value;
+            const grupoBase = document.getElementById('grupo-base');
+
+            // Si es rectángulo muestra la base, si es triángulo la oculta
+            if (figura === 'rectangulo') {
+                grupoBase.style.display = 'block';
+            } else {
+                grupoBase.style.display = 'none';
+            }
+        }
+
+        function dibujar() {
+            const figura = document.getElementById('figura').value;
+            const caracter = document.getElementById('caracter').value || '*';
+            const altura = parseInt(document.getElementById('altura').value) || 0;
+            const resultadoDiv = document.getElementById('resultado');
+            
+            let dibujo = "";
+
+            if (altura <= 0) {
+                resultadoDiv.textContent = "Por favor, ingresa una altura válida.";
+                return;
+            }
+
+            if (figura === 'triangulo') {
+                // Lógica para dibujar el triángulo (línea por línea)
+                for (let i = 1; i <= altura; i++) {
+                    dibujo += caracter.repeat(i) + "\n";
+                }
+            } else if (figura === 'rectangulo') {
+                const base = parseInt(document.getElementById('base').value) || 0;
+                if (base <= 0) {
+                    resultadoDiv.textContent = "Por favor, ingresa una base válida.";
+                    return;
+                }
+                // Lógica para dibujar el rectángulo
+                for (let i = 0; i < altura; i++) {
+                    dibujo += caracter.repeat(base) + "\n";
+                }
+            }
+
+            // Insertar el texto generado manteniendo los saltos de línea
+            resultadoDiv.textContent = dibujo;
+        }
+    </script>
+
+</body>
+</html>
